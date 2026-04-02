@@ -1,0 +1,13 @@
+node_modules/
+.env
+cache/
+artifacts/
+typechain-types/
+coverage/
+coverage.json
+
+frontend/node_modules/
+frontend/dist/
+
+# Hardhat Ignition
+ignition/deployments/
