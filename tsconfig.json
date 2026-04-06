@@ -11,5 +11,6 @@
     "rootDir": ".",
     "types": ["mocha", "node", "chai"]
   },
-  "include": ["./scripts", "./test", "./typechain-types", "./hardhat.config.ts"]
+  "include": ["./scripts", "./test", "./typechain-types", "./hardhat.config.ts"],
+  "exclude": ["./frontend"]
 }
