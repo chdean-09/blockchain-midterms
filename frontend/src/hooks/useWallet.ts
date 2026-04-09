@@ -56,6 +56,28 @@ export function useWallet() {
     }
   }, []);
 
+  // Auto-reconnect if wallet was previously connected
+  useEffect(() => {
+    if (!window.ethereum) return;
+    window.ethereum
+      .request({ method: "eth_accounts" })
+      .then((accounts: unknown) => {
+        if (!Array.isArray(accounts)) return;
+        if (accounts.length > 0) {
+          const provider = new BrowserProvider(window.ethereum!);
+          checkNetwork(provider).then((isCorrectNetwork) => {
+            setState({
+              address: accounts[0],
+              provider,
+              isCorrectNetwork,
+              isConnecting: false,
+            });
+          });
+        }
+      })
+      .catch(() => {});
+  }, [checkNetwork]);
+
   useEffect(() => {
     if (!window.ethereum) return;
 

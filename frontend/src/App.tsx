@@ -84,6 +84,10 @@ function App() {
       </NetworkGuard>
 
       <TransactionStatus txState={txState} onDismiss={clearTxState} />
+
+      <footer className="footer">
+        <p>Each like tips the creator 0.0001 ETH</p>
+      </footer>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Contract } from "ethers";
 import type { Post } from "../types";
 
@@ -10,6 +10,7 @@ export function usePosts(
   const [userEarnings, setUserEarnings] = useState<bigint>(0n);
   const [likedPostIds, setLikedPostIds] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
+  const listenersAttached = useRef(false);
 
   const fetchPosts = useCallback(async () => {
     if (!readContract) return;
@@ -72,6 +73,30 @@ export function usePosts(
   useEffect(() => {
     fetchLikedStatus();
   }, [fetchLikedStatus]);
+
+  // Listen to contract events for real-time feed updates
+  useEffect(() => {
+    if (!readContract || listenersAttached.current) return;
+    listenersAttached.current = true;
+
+    const handlePostCreated = () => {
+      fetchPosts();
+    };
+
+    const handlePostLiked = () => {
+      fetchPosts();
+      fetchUserEarnings();
+    };
+
+    readContract.on("PostCreated", handlePostCreated);
+    readContract.on("PostLiked", handlePostLiked);
+
+    return () => {
+      readContract.off("PostCreated", handlePostCreated);
+      readContract.off("PostLiked", handlePostLiked);
+      listenersAttached.current = false;
+    };
+  }, [readContract, fetchPosts, fetchUserEarnings]);
 
   const refreshAll = useCallback(async () => {
     await fetchPosts();

@@ -8,6 +8,7 @@ interface CreatePostFormProps {
 export function CreatePostForm({ onSubmit, isPending }: CreatePostFormProps) {
   const [imageUrl, setImageUrl] = useState("");
   const [caption, setCaption] = useState("");
+  const [previewError, setPreviewError] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,7 +16,15 @@ export function CreatePostForm({ onSubmit, isPending }: CreatePostFormProps) {
     await onSubmit(imageUrl.trim(), caption.trim());
     setImageUrl("");
     setCaption("");
+    setPreviewError(false);
   };
+
+  const handleImageUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImageUrl(e.target.value);
+    setPreviewError(false);
+  };
+
+  const showPreview = imageUrl.trim().length > 0 && !previewError;
 
   return (
     <form className="create-post-form" onSubmit={handleSubmit}>
@@ -24,9 +33,18 @@ export function CreatePostForm({ onSubmit, isPending }: CreatePostFormProps) {
         type="text"
         placeholder="Image URL (e.g. https://picsum.photos/600/400)"
         value={imageUrl}
-        onChange={(e) => setImageUrl(e.target.value)}
+        onChange={handleImageUrlChange}
         disabled={isPending}
       />
+      {showPreview && (
+        <div className="image-preview">
+          <img
+            src={imageUrl.trim()}
+            alt="Preview"
+            onError={() => setPreviewError(true)}
+          />
+        </div>
+      )}
       <input
         type="text"
         placeholder="Caption"
