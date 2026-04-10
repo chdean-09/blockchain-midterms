@@ -26,7 +26,7 @@ export function PostCard({ post, isOwner, hasLiked, onLike, isLiking }: PostCard
     <div className="post-card">
       <div className="post-image-container">
         {imgError ? (
-          <div className="post-image-placeholder">Image failed to load</div>
+          <img src="/placeholder.svg" alt="Image not available" className="post-image" />
         ) : (
           <img
             src={post.imageUrl}
