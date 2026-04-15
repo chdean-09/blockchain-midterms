@@ -2,7 +2,10 @@
 
 A pay-to-like social dApp where users post images with captions and others tip the creator with 0.0001 ETH per like. Built on Ethereum (Sepolia testnet).
 
+## Deployed URL Links
 
+- **Frontend:** https://blockchain-midterms-ten.vercel.app/
+- **Sepolia Deployed Contact Address:** 0xeD880f69f348289BDE11FFEdEb51285a58b1dB4c
 
 ## Tech Stack
 
